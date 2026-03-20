@@ -2,5 +2,7 @@ name|type|data|command|depend|seed|path|time|size|bytes|format|repository|iterat
 data_url|stem|402a3ee8324b9a7d|48a68f8cc79e96c9|2c530c1562a7fbd1|-1708236839||t20532.7436222191s|s110b|110|rds|local|vector|||1.08||
 patients|stem|ed0a253abdc05c26|0bca069c2238f2cb|290410a29e99cb5c|1057894184||t20532.7472949012s|s580708b|580708|rds|local|vector|||0.27||
 patient_validation_report|stem|c767ca8b8a901fe7|ba37cb63d7e19ce8|232820d399afc612|-1212627924|patient_validation.html|t20532.7673949798s|s944588b|944588|file|local|vector|||2.08||
+process_patients|function|9283ef0df5a62367
 get_patients|function|94cb4da1aaea43bb
 validate_patients|function|3abd8488fbeb8c8f
+patients_processed|stem|654b0e9be60d2a61|dc751fcfa943ba3b|e4d1a37340f2d989|-911928841||t20532.8022387305s|s642411b|642411|rds|local|vector|||0.19||

@@ -2,3 +2,5 @@ name|type|parent|branches|progress
 data_url|stem|data_url|0|skipped
 patients|stem|patients|0|skipped
 patient_validation_report|stem|patient_validation_report|0|skipped
+patients_processed|stem|patients_processed|0|dispatched
+patients_processed|stem|patients_processed|0|completed

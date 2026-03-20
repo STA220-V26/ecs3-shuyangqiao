@@ -78,6 +78,12 @@ list(
     patient_validation_report,
     validate_patients(patients),
     format = "file" # 告诉 targets 追踪生成的 HTML 文件 [cite: 89-90]
+  ),
+
+  # 3. 特征处理步骤.处理因子和隐私控制 (Section 3.1 & 3.2)
+  tar_target(
+    patients_processed,
+    process_patients(patients)
   )
 )
 

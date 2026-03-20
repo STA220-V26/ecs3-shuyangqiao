@@ -79,3 +79,31 @@ validate_patients <- function(data) {
   return("patient_validation.html")
 }
 
+
+process_patients <- function(data) {
+  # 确保是 data.table 格式
+  dt <- data.table::as.data.table(data)
+  
+  # --- 3.1 因子转换 (Factors) --- [cite: 93-94]
+  # 将婚姻状况缩写转换为完整标签 [cite: 102-111]
+  dt[, marital := factor(
+    marital,
+    levels = c("S", "M", "D", "W"),
+    labels = c("Single", "Married", "Divorced", "Widowed")
+  )]
+  
+  # 自动识别并转换其他分类变量（如性别、种族、州等） [cite: 114-121]
+  # 寻找唯一值较少（少于10个）的字符型列
+  fctr_candidates <- names(dt)[dt[, lapply(.SD, data.table::uniqueN) < 10, .SDcols = is.character]]
+  dt[, (fctr_candidates) := lapply(.SD, as.factor), .SDcols = fctr_candidates]
+  
+  # --- 3.2 隐私保护 (Disclosure Control) --- [cite: 129-131]
+  # 使用 forcats 减少低比例种族的细分，将其归类为 "Other" [cite: 136-137]
+  # 这能防止通过“性别+种族+州”组合定位到具体的个人 [cite: 132-134]
+  if ("race" %in% names(dt)) {
+    dt[, race := forcats::fct_lump_prop(race, prop = 0.05)] 
+  }
+  
+  return(dt)
+}
+
