@@ -7,10 +7,8 @@
 library(targets)
 # library(tarchetypes) # Load other packages as needed.
 
-source("R/functions.R")
-
 # Set target options:
-tar_option_set(packages = c("tidyverse", "data.table", "janitor", "curl", "fs"))
+tar_option_set(packages = c("tidyverse", "data.table", "janitor", "curl", "fs", "pointblank"))
 # tar_option_set(
   # packages = c("tibble") # Packages that your targets need for their tasks.
   # format = "qs", # Optionally set the default storage format. qs is fast.
@@ -48,6 +46,7 @@ tar_option_set(packages = c("tidyverse", "data.table", "janitor", "curl", "fs"))
 # )
 
 # Run the R scripts in the R/ folder with your custom functions:
+source("R/functions.R")
 tar_source()
 # tar_source("other_functions.R") # Source other scripts as needed.
 
@@ -73,5 +72,12 @@ list(
   tar_target(
     patients, 
     get_patients(data_url, "data.zip", "data-fixed/patients.csv")
+  ),
+  
+  tar_target(
+    patient_validation_report,
+    validate_patients(patients),
+    format = "file" # 告诉 targets 追踪生成的 HTML 文件 [cite: 89-90]
   )
 )
+

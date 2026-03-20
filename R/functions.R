@@ -20,3 +20,62 @@ get_patients <- function(url, destfile, csv_path) {
   
   return(patients)
 }
+
+
+# 3 Expectations/validations
+# 数据验证函数
+validate_patients <- function(data) {
+  agent <- data |>
+    pointblank::create_agent(label = "Patient Data Quality Validation") |>
+    
+    # 检查所有日期列是否在合理范围内（1900年至今） [cite: 64-67]
+    pointblank::col_vals_between(
+      where(is.Date),
+      as.Date("1900-01-01"),
+      as.Date(Sys.Date()),
+      na_pass = TRUE,
+      label = "Dates should be between 1900 and today."
+    ) |>
+    
+    # 检查死亡日期是否晚于或等于出生日期 [cite: 71-74]
+    pointblank::col_vals_gte(
+      deathdate,
+      pointblank::vars(birthdate),
+      na_pass = TRUE,
+      label = "Death date must be greater than or equal to birthdate."
+    ) |>
+    
+    # 检查 SSN 格式是否正确 [cite: 77-80]
+    pointblank::col_vals_regex(
+      ssn,
+      "^[0-9]{3}-[0-9]{2}-[0-9]{4}$",
+      label = "SSN must follow the 000-00-0000 format."
+    ) |>
+    
+    # --- 你需要新增的 3 条验证规则（示例） ---
+    
+    # 1. 检查性别是否只包含预期值 (M, F) [cite: 58, 61]
+    pointblank::col_vals_in_set(
+      gender,
+      set = c("M", "F"),
+      label = "Gender must be either 'M' or 'F'."
+    ) |>
+    
+    # 2. 检查婚姻状况是否在已知范围内 [cite: 57, 61]
+    pointblank::col_vals_in_set(
+      marital,
+      set = c("S", "M", "D", "W"),
+      label = "Marital status must be S, M, D, or W."
+    ) |>
+    
+    # 3. 检查 ID 是否唯一（主键约束） 
+    pointblank::col_vals_not_null(id, label = "ID cannot be NULL.") |>
+    pointblank::rows_distinct(pointblank::vars(id), label = "Each patient ID must be unique.") |>
+    
+    pointblank::interrogate()
+  
+  # 导出报告并返回文件路径供 targets 追踪 
+  pointblank::export_report(agent, "patient_validation.html")
+  return("patient_validation.html")
+}
+
