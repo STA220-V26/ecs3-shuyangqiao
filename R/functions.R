@@ -168,3 +168,24 @@ process_patient_names <- function(data) {
   return(dt)
 }
 
+
+# 6 Necessary data. Addresses & Driving Licenses
+process_patient_geo_and_id <- function(data) {
+  dt <- data.table::as.data.table(data)
+  
+  # 1. 清理经纬度（转换为数值型）
+  dt[, `:=`(lat = as.numeric(lat), lon = as.numeric(lon))]
+  
+  # 2. 拼接完整地址
+  dt[, address := paste(address, city, state, zip, sep = ", ")]
+  
+  # 3. 提取驾驶证号 (DL)
+  # 驾驶证号通常藏在 'drivers' 列中，我们提取 S999... 这种格式
+  dt[, dl := stringr::str_extract(drivers, "S[0-9]{8}")]
+  
+  # 4. 删除不再需要的列
+  dt[, c("city", "state", "zip", "drivers") := NULL]
+  
+  return(dt)
+}
+

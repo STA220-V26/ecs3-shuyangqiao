@@ -5,10 +5,12 @@ patient_validation_report|stem|c767ca8b8a901fe7|ba37cb63d7e19ce8|232820d399afc61
 patients_processed|stem|654b0e9be60d2a61|dc751fcfa943ba3b|e4d1a37340f2d989|-911928841||t20532.8022387305s|s642411b|642411|rds|local|vector|||0.19||
 snapshot_date|stem|a6899b98affcd519|8d7a64de0fd4ab65|4ecdef491f13cb0d|-1596913052||t20532.8269676901s|s81b|81|rds|local|vector|||2.12|package 'dplyr' was built under R version 4.5.2. package 'pointblank' was built under R version 4.5.2. package 'duckplyr' was built under R version 4.5.2|
 patients_with_age|stem|eb090ca1e40a8618|a8814a6f1d4d9046|4fefae3f97433b3b|1294097869||t20532.8269700648s|s654971b|654971|rds|local|vector|||0.02||
+patients_final_names|stem|7d741ff704a87052|252b7a0043486852|efade166a5b3da2f|-1835357481||t20532.8437175279s|s644718b|644718|rds|local|vector|||0.06||
 process_patients|function|9283ef0df5a62367
 get_patients|function|94cb4da1aaea43bb
 validate_patients|function|3abd8488fbeb8c8f
+process_patient_geo_and_id|function|fc3f04b0ea9cbb0a
 process_patient_names|function|1a18fa482c65f2f2
 add_derived_variables|function|361c8cdfdb62e361
 get_snapshot_date|function|397e80a4af5a7f1d
-patients_final_names|stem|7d741ff704a87052|252b7a0043486852|efade166a5b3da2f|-1835357481||t20532.8437175279s|s644718b|644718|rds|local|vector|||0.06||
+patients_complete|stem|afed6a3d723cd345|2d02626f7d1a538f|5065b4995cf35159|-417595223||t20532.8487970344s|s591936b|591936|rds|local|vector|||0.03||

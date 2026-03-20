@@ -103,6 +103,12 @@ list(
   tar_target(
     patients_final_names,
     process_patient_names(patients_with_age)
+  ),
+
+  # 6
+  tar_target(
+    patients_complete,
+    process_patient_geo_and_id(patients_final_names)
   )
 )
 
