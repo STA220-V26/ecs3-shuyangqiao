@@ -189,3 +189,93 @@ process_patient_geo_and_id <- function(data) {
   return(dt)
 }
 
+
+# 7 Linkage
+# 1. 将 CSV 转换为 Parquet (Section 7 中的建议) [cite: 212-219]
+convert_data_to_parquet <- function(zip_path) {
+  zip::unzip(zip_path) # 解压所有文件到 data-fixed [cite: 210]
+  fs::dir_create("data-parquet")
+  
+  files <- fs::dir_ls("data-fixed/", glob = "*.csv")
+  
+  purrr::walk(files, function(file) {
+    new_file <- file |>
+      stringr::str_replace("data-fixed", "data-parquet") |>
+      stringr::str_replace(".csv", ".parquet")
+    
+    duckplyr::read_csv_duckdb(file) |>
+      duckplyr::compute_parquet(new_file)
+  })
+  
+  fs::dir_delete("data-fixed") # 清理临时文件夹 [cite: 223]
+  return("data-parquet")
+}
+
+# 2. 获取并处理程序数据 [cite: 224-238]
+get_processed_procedures <- function(parquet_dir) {
+  # 读取程序表 [cite: 225]
+  path <- fs::path(parquet_dir, "procedures.parquet")
+  procs <- duckplyr::read_parquet_duckdb(path) |>
+    # 只选择 ID、ICD10编码和开始日期，并过滤掉缺失编码 [cite: 233-234]
+    dplyr::select(patient, reasoncode_icd10, start) |>
+    dplyr::filter(!is.na(reasoncode_icd10)) |>
+    dplyr::collect()
+  
+  dt <- data.table::as.data.table(procs)
+  # 提取年份并删除原始日期列 [cite: 238]
+  dt[, year := data.table::year(start)][, start := NULL]
+  
+  return(dt)
+}
+
+# 3. 关联患者与程序并分析 [cite: 239-244]
+analyze_adult_procedures <- function(patients, procedures) {
+  # 确保患者表中有 birthdate
+  p_small <- patients[, .(id, birthdate = as.IDate(birthdate))]
+  
+  # 执行关联 [cite: 242]
+  # 过滤：(就医年份 - 出生年份) >= 18 岁 
+  # 统计：按 ICD10 编码和年份分组计数 
+  result <- procedures[p_small, on = .(patient = id), nomatch = NULL]
+  
+  summary <- result[year - data.table::year(birthdate) >= 18, 
+                    .(N = .N), 
+                    by = .(reasoncode_icd10, year)]
+  
+  return(summary)
+}
+
+plot_top_conditions <- function(summary_data) {
+  # 1. 使用 {decoder} 包添加描述文本 [cite: 248-251]
+  # 注意：这里将编码关联到瑞典语/英语描述
+  cond_by_year <- data.table::setDT(decoder::icd10se)[
+    summary_data, 
+    on = c(key = "reasoncode_icd10")
+  ]
+  
+  # 2. 找出总体频率最高的前 5 种疾病 [cite: 255-256]
+  top5_values <- cond_by_year[, .(total_N = sum(N)), by = value][
+    order(-total_N)
+  ][1:5, value]
+  
+  # 3. 创建可视化图表 [cite: 257-264]
+  p <- ggplot2::ggplot(
+    cond_by_year[value %in% top5_values], 
+    ggplot2::aes(x = year, y = N, color = value)
+  ) +
+    ggplot2::geom_line(linewidth = 1) +
+    ggplot2::theme_minimal() +
+    ggplot2::theme(legend.position = "bottom") +
+    ggplot2::guides(color = ggplot2::guide_legend(ncol = 1)) +
+    # 对过长的标签进行自动换行 [cite: 264]
+    ggplot2::scale_color_discrete(labels = \(x) stringr::str_wrap(x, width = 40)) +
+    ggplot2::labs(
+      title = "Top 5 Medical Conditions Over Time (Adults)",
+      x = "Year of Procedure",
+      y = "Number of Procedures",
+      color = "Condition"
+    )
+  
+  return(p)
+}
+

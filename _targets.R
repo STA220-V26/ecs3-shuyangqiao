@@ -8,7 +8,7 @@ library(targets)
 # library(tarchetypes) # Load other packages as needed.
 
 # Set target options:
-tar_option_set(packages = c("tidyverse", "data.table", "janitor", "curl", "fs", "pointblank", "duckplyr"))
+tar_option_set(packages = c("tidyverse", "data.table", "janitor", "curl", "fs", "pointblank", "duckplyr", "decoder"))
 # tar_option_set(
   # packages = c("tibble") # Packages that your targets need for their tasks.
   # format = "qs", # Optionally set the default storage format. qs is fast.
@@ -109,6 +109,32 @@ list(
   tar_target(
     patients_complete,
     process_patient_geo_and_id(patients_final_names)
+  ),
+
+  # 7
+  # 1. 转换数据格式
+  tar_target(
+    parquet_folder,
+    convert_data_to_parquet("data.zip"),
+    format = "file"
+  ),
+
+  # 2. 提取程序数据
+  tar_target(
+    procedures_data,
+    get_processed_procedures(parquet_folder)
+  ),
+
+  # 3. 最终关联与统计 (Section 7 核心结果)
+  tar_target(
+    adult_proc_summary,
+    analyze_adult_procedures(patients_complete, procedures_data)
+  ),
+
+  # Section 8: 可视化分析 [cite: 254-257]
+  tar_target(
+    top_conditions_plot,
+    plot_top_conditions(adult_proc_summary)
   )
 )
 
