@@ -139,3 +139,32 @@ add_derived_variables <- function(data, snapshot_date) {
   return(dt)
 }
 
+
+# 5 Names
+process_patient_names <- function(data) {
+  dt <- data.table::as.data.table(data)
+  
+  # 1. 核心修复：先将相关的列转回字符型，避免与 Factor 冲突
+  cols_to_fix <- c("prefix", "first", "middle", "last", "suffix")
+  
+  # 使用 as.character 转换，这样就可以安全地替换为 "" 了
+  dt[, (cols_to_fix) := lapply(.SD, as.character), .SDcols = cols_to_fix]
+  
+  # 2. 处理缺失值
+  dt[, (cols_to_fix) := lapply(.SD, \(x) tidyr::replace_na(x, "")), .SDcols = cols_to_fix]
+  
+  # 3. 合并全名
+  dt[, full_name := paste(prefix, first, middle, last)]
+  dt[suffix != "", full_name := paste0(full_name, ", ", suffix)]
+  
+  # 4. 清理空格
+  dt[, full_name := stringr::str_squish(full_name)]
+  
+  # 5. 按照指令删除原始列
+  # 注意：如果指令要求保留 maiden，请从列表中移除它
+  cols_to_remove <- c("prefix", "first", "middle", "last", "suffix", "maiden")
+  dt[, (cols_to_remove) := NULL]
+  
+  return(dt)
+}
+

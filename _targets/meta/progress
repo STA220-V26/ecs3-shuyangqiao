@@ -5,3 +5,5 @@ patients|stem|patients|0|skipped
 patient_validation_report|stem|patient_validation_report|0|skipped
 patients_processed|stem|patients_processed|0|skipped
 patients_with_age|stem|patients_with_age|0|skipped
+patients_final_names|stem|patients_final_names|0|dispatched
+patients_final_names|stem|patients_final_names|0|completed

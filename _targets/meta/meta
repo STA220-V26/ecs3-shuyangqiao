@@ -8,5 +8,7 @@ patients_with_age|stem|eb090ca1e40a8618|a8814a6f1d4d9046|4fefae3f97433b3b|129409
 process_patients|function|9283ef0df5a62367
 get_patients|function|94cb4da1aaea43bb
 validate_patients|function|3abd8488fbeb8c8f
+process_patient_names|function|1a18fa482c65f2f2
 add_derived_variables|function|361c8cdfdb62e361
 get_snapshot_date|function|397e80a4af5a7f1d
+patients_final_names|stem|7d741ff704a87052|252b7a0043486852|efade166a5b3da2f|-1835357481||t20532.8437175279s|s644718b|644718|rds|local|vector|||0.06||

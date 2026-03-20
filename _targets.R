@@ -97,6 +97,12 @@ list(
   tar_target(
     patients_with_age,
     add_derived_variables(patients_processed, snapshot_date)
+  ),
+
+  # 5
+  tar_target(
+    patients_final_names,
+    process_patient_names(patients_with_age)
   )
 )
 
