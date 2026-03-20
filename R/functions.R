@@ -107,3 +107,35 @@ process_patients <- function(data) {
   return(dt)
 }
 
+
+# 4 Derived variables
+# 函数 1：获取数据快照日期 [cite: 147-155]
+get_snapshot_date <- function(zip_path) {
+  # 解压特定的文件用于分析 [cite: 150]
+  unzip(zip_path, files = "data-fixed/payer_transitions.csv")
+  
+  # 使用 duckplyr 快速读取并计算最大日期 [cite: 151-152]
+  last_date <- duckplyr::read_csv_duckdb("data-fixed/payer_transitions.csv") |>
+    dplyr::summarise(lastdate = max(start_date, na.rm = TRUE)) |> # 指南建议用 start_date [cite: 158]
+    dplyr::collect() |>
+    dplyr::pull(lastdate) |>
+    as.Date()
+    
+  return(last_date)
+}
+
+# 函数 2：计算年龄并添加派生变量 [cite: 139-141]
+add_derived_variables <- function(data, snapshot_date) {
+  dt <- data.table::as.data.table(data)
+  
+  # 计算在快照日期时的年龄 [cite: 140, 159]
+  # 使用整除 %/% 365.241 来获得周岁 
+  dt[, age := as.integer(as.Date(snapshot_date) - as.Date(birthdate)) %/% 365.241]
+  
+  # 标记数据采集时是否在世 [cite: 142-143, 159]
+  # 如果死亡日期为空，或者死亡日期晚于快照日期，则认为在采集时“在世”
+  dt[, is_living_at_snapshot := is.na(deathdate) | deathdate > snapshot_date]
+  
+  return(dt)
+}
+

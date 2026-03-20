@@ -8,7 +8,7 @@ library(targets)
 # library(tarchetypes) # Load other packages as needed.
 
 # Set target options:
-tar_option_set(packages = c("tidyverse", "data.table", "janitor", "curl", "fs", "pointblank"))
+tar_option_set(packages = c("tidyverse", "data.table", "janitor", "curl", "fs", "pointblank", "duckplyr"))
 # tar_option_set(
   # packages = c("tibble") # Packages that your targets need for their tasks.
   # format = "qs", # Optionally set the default storage format. qs is fast.
@@ -74,16 +74,29 @@ list(
     get_patients(data_url, "data.zip", "data-fixed/patients.csv")
   ),
   
+  # 3.0
   tar_target(
     patient_validation_report,
     validate_patients(patients),
     format = "file" # 告诉 targets 追踪生成的 HTML 文件 [cite: 89-90]
   ),
 
-  # 3. 特征处理步骤.处理因子和隐私控制 (Section 3.1 & 3.2)
+  # 3.1 & 3.2 特征处理步骤.处理因子和隐私控制
   tar_target(
     patients_processed,
     process_patients(patients)
+  ),
+  
+  # 4.1 确定数据快照日期 [cite: 147-150]
+  tar_target(
+    snapshot_date,
+    get_snapshot_date("data.zip")
+  ),
+
+  # 4.2 计算派生变量 (年龄等) [cite: 138-140]
+  tar_target(
+    patients_with_age,
+    add_derived_variables(patients_processed, snapshot_date)
   )
 )
 
