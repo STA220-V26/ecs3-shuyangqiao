@@ -111,6 +111,12 @@ list(
     process_patient_geo_and_id(patients_final_names)
   ),
 
+  # 地图可视化 [cite: 198-201]
+  tar_target(
+    patient_locations_map,
+    create_patient_map(patients_complete)
+  ),
+
   # 7
   # 1. 转换数据格式
   tar_target(

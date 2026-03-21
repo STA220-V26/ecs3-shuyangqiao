@@ -2,27 +2,29 @@ name|type|data|command|depend|seed|path|time|size|bytes|format|repository|iterat
 data_url|stem|402a3ee8324b9a7d|48a68f8cc79e96c9|2c530c1562a7fbd1|-1708236839||t20532.7436222191s|s110b|110|rds|local|vector|||1.08||
 patients|stem|ed0a253abdc05c26|0bca069c2238f2cb|290410a29e99cb5c|1057894184||t20532.7472949012s|s580708b|580708|rds|local|vector|||0.27||
 patient_validation_report|stem|c767ca8b8a901fe7|ba37cb63d7e19ce8|232820d399afc612|-1212627924|patient_validation.html|t20532.7673949798s|s944588b|944588|file|local|vector|||2.08||
-patients_processed|stem|654b0e9be60d2a61|dc751fcfa943ba3b|e4d1a37340f2d989|-911928841||t20532.8022387305s|s642411b|642411|rds|local|vector|||0.19||
 snapshot_date|stem|a6899b98affcd519|8d7a64de0fd4ab65|4ecdef491f13cb0d|-1596913052||t20532.8269676901s|s81b|81|rds|local|vector|||2.12|package 'dplyr' was built under R version 4.5.2. package 'pointblank' was built under R version 4.5.2. package 'duckplyr' was built under R version 4.5.2|
-patients_with_age|stem|eb090ca1e40a8618|a8814a6f1d4d9046|4fefae3f97433b3b|1294097869||t20532.8269700648s|s654971b|654971|rds|local|vector|||0.02||
-patients_final_names|stem|7d741ff704a87052|252b7a0043486852|efade166a5b3da2f|-1835357481||t20532.8437175279s|s644718b|644718|rds|local|vector|||0.06||
-patients_complete|stem|afed6a3d723cd345|2d02626f7d1a538f|5065b4995cf35159|-417595223||t20532.8487970344s|s591936b|591936|rds|local|vector|||0.03||
 observations|stem|bb377c0598509a82|bf506a0addb46f27|39c74a3b26bb7985|125870209||t20532.8787573483s|s47478379b|47478379|rds|local|vector|||12.04|package 'dplyr' was built under R version 4.5.2. package 'pointblank' was built under R version 4.5.2. package 'duckplyr' was built under R version 4.5.2|
 link_patient_observations|function|916babad49f6b4cf
 get_observations|function|5e4cb941fe79f1e9
 final_analysis_data|stem|5ab671cd73cd1346|5a96d84d1f71cea4|bec4c461f56124e0|-996900661||t20532.8892691157s|s603635b|603635|rds|local|vector|||0.24||
 parquet_folder|stem|642f89b4db10e6d1|997d23d90e292c0d|71fc029c8f197800|353282265|data-parquet|t20532.9121135388s|s298077016b|298077016|file|local|vector|||23.58|package 'dplyr' was built under R version 4.5.2. package 'pointblank' was built under R version 4.5.2. package 'duckplyr' was built under R version 4.5.2|
 procedures_data|stem|5ebfa5f27c00e617|c64cf2fc77bcbfdb|f1d3ebaf62efed01|-1536849559||t20532.9121226113s|s364868b|364868|rds|local|vector|||0.09||
-adult_proc_summary|stem|a209b11af24d397d|bda796ad37c6737f|f0d0377fb416d291|-1468604908||t20532.9121276964s|s8103b|8103|rds|local|vector|||0.2||
-process_patients|function|9283ef0df5a62367
+top_conditions_plot|stem|106d1cf7379b14c1|b61c4b124aa48db9|67639935fd0c3761|-920067526||t20532.933266827s|s1225230b|1225230|rds|local|vector|||0.16||
+process_patients|function|984fcd9fed482c04
 get_patients|function|94cb4da1aaea43bb
 convert_data_to_parquet|function|b0bcc2e45f42769e
 validate_patients|function|3abd8488fbeb8c8f
-process_patient_geo_and_id|function|fc3f04b0ea9cbb0a
+process_patient_geo_and_id|function|569ada8816531daa
 plot_top_conditions|function|c792cda78ab8045e
+create_patient_map|function|2918bac149e1682a
 process_patient_names|function|1a18fa482c65f2f2
 analyze_adult_procedures|function|898b2e0b6496464e
 get_processed_procedures|function|807c7e4284c2256e
 add_derived_variables|function|361c8cdfdb62e361
 get_snapshot_date|function|397e80a4af5a7f1d
-top_conditions_plot|stem|106d1cf7379b14c1|b61c4b124aa48db9|67639935fd0c3761|-920067526||t20532.933266827s|s1225230b|1225230|rds|local|vector|||0.16||
+patients_processed|stem|fc5a7b8548cd0c7d|dc751fcfa943ba3b|1e4f633e78bf0001|-911928841||t20532.9891471045s|s580003b|580003|rds|local|vector|||0.01||
+patients_with_age|stem|aca901cb4a9aec75|a8814a6f1d4d9046|cd930eaad8161801|1294097869||t20532.9891491035s|s592753b|592753|rds|local|vector|||0||
+patients_final_names|stem|54697a6976a14402|252b7a0043486852|0974d28ea407fab0|-1835357481||t20532.989151583s|s579843b|579843|rds|local|vector|||0.03||
+patients_complete|stem|7e04c1a183427e53|2d02626f7d1a538f|fb329900c38d5c88|-417595223||t20532.9891537803s|s581988b|581988|rds|local|vector|||0.03||
+adult_proc_summary|stem|a209b11af24d397d|bda796ad37c6737f|384faf7e6cb5d1c6|-1468604908||t20532.9891578087s|s8103b|8103|rds|local|vector|||0.21||
+patient_locations_map|stem|a83705ae985bdf9d|21e5533f2f4a26af|411f4a638873ae7f|-43827691||t20532.9891626789s|s1938544b|1938544|rds|local|vector|||0.05||

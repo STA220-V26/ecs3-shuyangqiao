@@ -94,8 +94,8 @@ process_patients <- function(data) {
   
   # 自动识别并转换其他分类变量（如性别、种族、州等） [cite: 114-121]
   # 寻找唯一值较少（少于10个）的字符型列
-  fctr_candidates <- names(dt)[dt[, lapply(.SD, data.table::uniqueN) < 10, .SDcols = is.character]]
-  dt[, (fctr_candidates) := lapply(.SD, as.factor), .SDcols = fctr_candidates]
+  # fctr_candidates <- names(dt)[dt[, lapply(.SD, data.table::uniqueN) < 10, .SDcols = is.character]]
+  # dt[, (fctr_candidates) := lapply(.SD, as.factor), .SDcols = fctr_candidates]
   
   # --- 3.2 隐私保护 (Disclosure Control) --- [cite: 129-131]
   # 使用 forcats 减少低比例种族的细分，将其归类为 "Other" [cite: 136-137]
@@ -170,23 +170,61 @@ process_patient_names <- function(data) {
 
 
 # 6 Necessary data. Addresses & Driving Licenses
+# process_patient_geo_and_id <- function(data) {
+#   dt <- data.table::as.data.table(data)
+  
+#   # 1. 清理经纬度（转换为数值型）
+#   dt[, `:=`(lat = as.numeric(lat), lon = as.numeric(lon))]
+  
+#   # 2. 拼接完整地址
+#   dt[, address := paste(address, city, state, zip, sep = ", ")]
+  
+#   # 3. 提取驾驶证号 (DL)
+#   # 驾驶证号通常藏在 'drivers' 列中，我们提取 S999... 这种格式
+#   dt[, dl := stringr::str_extract(drivers, "S[0-9]{8}")]
+  
+#   # 4. 删除不再需要的列
+#   dt[, c("city", "state", "zip", "drivers") := NULL]
+  
+#   return(dt)
+# }
+
 process_patient_geo_and_id <- function(data) {
   dt <- data.table::as.data.table(data)
   
-  # 1. 清理经纬度（转换为数值型）
-  dt[, `:=`(lat = as.numeric(lat), lon = as.numeric(lon))]
+  # 1. 转换经纬度：显式指定类型转换 [cite: 188-191]
+  dt[, lat := as.numeric(lat)]
+  dt[, lon := as.numeric(lon)]
   
-  # 2. 拼接完整地址
-  dt[, address := paste(address, city, state, zip, sep = ", ")]
-  
-  # 3. 提取驾驶证号 (DL)
-  # 驾驶证号通常藏在 'drivers' 列中，我们提取 S999... 这种格式
+  # 2. 提取驾驶证号 (DL) [cite: 198-200]
+  # 必须在删除 'drivers' 列之前执行
   dt[, dl := stringr::str_extract(drivers, "S[0-9]{8}")]
   
-  # 4. 删除不再需要的列
-  dt[, c("city", "state", "zip", "drivers") := NULL]
+  # 3. 拼接完整地址 [cite: 193-195]
+  # 技巧：创建一个新列名 'full_address' 避免覆盖原始的 'address' 街道列导致 paste 出错
+  dt[, full_address := paste(address, city, state, zip, sep = ", ")]
+  
+  # 4. 批量删除不再需要的列 [cite: 185, 191-192]
+  cols_to_remove <- c("address", "city", "state", "zip", "drivers")
+  dt[, (cols_to_remove) := NULL]
+  
+  # 5. 为了保持下游代码兼容，可以把 full_address 改回 address
+  # data.table::setnames(dt, "full_address", "address")
   
   return(dt)
+}
+
+# 生成患者分布地图 [cite: 198-201]
+create_patient_map <- function(data) {
+  map <- leaflet::leaflet(data = data) |>
+    leaflet::addTiles() |>
+    leaflet::addMarkers(
+      lng = ~lon, 
+      lat = ~lat, 
+      label = ~full_name
+    )
+  
+  return(map)
 }
 
 
