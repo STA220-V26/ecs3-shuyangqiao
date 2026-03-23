@@ -1,5 +1,13 @@
 *.zip
-data-fixed/*
-data
-instructions_files/*
+
+data/
+data-fixed/
 data-parquet/
+data-raw/
+
+instructions_files/*
+.Rhistory
+.RData
+.Rproj.user/
+
+_targets/
