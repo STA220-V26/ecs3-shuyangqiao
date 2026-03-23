@@ -63,81 +63,84 @@ tar_source()
 #   )
 # )
 
-
 list(
-  # 定义下载链接和文件名
+  # 2 Patient data
+  # Define the remote source for the dataset zip file
   tar_target(data_url, "https://github.com/eribul/cs/raw/refs/heads/main/data.zip"),
-  
-  # 运行获取数据的函数
+
+  # Download and extract the patients dataset from the zip archive
   tar_target(
     patients, 
     get_patients(data_url, "data.zip", "data-fixed/patients.csv")
   ),
-  
-  # 3.0
+
+  # 3 Expectations/validations
+  # Generate a validation report to check for data integrity
   tar_target(
     patient_validation_report,
     validate_patients(patients),
-    format = "file" # 告诉 targets 追踪生成的 HTML 文件 [cite: 89-90]
+    format = "file"
   ),
 
-  # 3.1 & 3.2 特征处理步骤.处理因子和隐私控制
+  # Basic data cleaning
   tar_target(
     patients_processed,
     process_patients(patients)
   ),
-  
-  # 4.1 确定数据快照日期 [cite: 147-150]
+
+  # 4 Derived variables
+  # Extract the snapshot date from the zip file metadata for age calculations
   tar_target(
     snapshot_date,
     get_snapshot_date("data.zip")
   ),
 
-  # 4.2 计算派生变量 (年龄等) [cite: 138-140]
+  # Calculate patient age and other derived metrics based on the snapshot date
   tar_target(
     patients_with_age,
     add_derived_variables(patients_processed, snapshot_date)
   ),
 
-  # 5
+  # 5 Clean and standardize patient names
   tar_target(
     patients_final_names,
     process_patient_names(patients_with_age)
   ),
 
   # 6
+  # Process coordinates (lat/lon), format addresses, and extract Driver's License IDs
   tar_target(
     patients_complete,
     process_patient_geo_and_id(patients_final_names)
   ),
 
-  # 地图可视化 [cite: 198-201]
+  # Generate an interactive Leaflet map to visualize patient geographic distribution
   tar_target(
     patient_locations_map,
     create_patient_map(patients_complete)
   ),
 
-  # 7
-  # 1. 转换数据格式
+  # 7 Linkage
+  # Convert raw CSV data to Parquet format for optimized storage and performance
   tar_target(
     parquet_folder,
     convert_data_to_parquet("data.zip"),
     format = "file"
   ),
 
-  # 2. 提取程序数据
+  # Read and pre-process the procedures dataset from the Parquet files
   tar_target(
     procedures_data,
     get_processed_procedures(parquet_folder)
   ),
 
-  # 3. 最终关联与统计 (Section 7 核心结果)
+  # Link patients with procedures to summarize condition trends
   tar_target(
     adult_proc_summary,
     analyze_adult_procedures(patients_complete, procedures_data)
   ),
 
-  # Section 8: 可视化分析 [cite: 254-257]
+  # Create a visualization of the top 5 medical conditions over time
   tar_target(
     top_conditions_plot,
     plot_top_conditions(adult_proc_summary)

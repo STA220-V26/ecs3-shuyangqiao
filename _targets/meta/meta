@@ -9,12 +9,18 @@ get_observations|function|5e4cb941fe79f1e9
 final_analysis_data|stem|5ab671cd73cd1346|5a96d84d1f71cea4|bec4c461f56124e0|-996900661||t20532.8892691157s|s603635b|603635|rds|local|vector|||0.24||
 parquet_folder|stem|642f89b4db10e6d1|997d23d90e292c0d|71fc029c8f197800|353282265|data-parquet|t20532.9121135388s|s298077016b|298077016|file|local|vector|||23.58|package 'dplyr' was built under R version 4.5.2. package 'pointblank' was built under R version 4.5.2. package 'duckplyr' was built under R version 4.5.2|
 procedures_data|stem|5ebfa5f27c00e617|c64cf2fc77bcbfdb|f1d3ebaf62efed01|-1536849559||t20532.9121226113s|s364868b|364868|rds|local|vector|||0.09||
-top_conditions_plot|stem|106d1cf7379b14c1|b61c4b124aa48db9|67639935fd0c3761|-920067526||t20532.933266827s|s1225230b|1225230|rds|local|vector|||0.16||
+top_conditions_plot|stem|c301b14ab3502df8|b61c4b124aa48db9|178166560a78a0c2|-920067526||t20535.436364476s|s1227800b|1227800|rds|local|vector|||0.29||
+patients_processed|stem|07aa1b111a2e8730|dc751fcfa943ba3b|1e4f633e78bf0001|-911928841||t20535.4466248055s|s580008b|580008|rds|local|vector|||0.01||
+patients_with_age|stem|ab58d3349bb13375|a8814a6f1d4d9046|31fbdec94f638956|1294097869||t20535.4466271299s|s592758b|592758|rds|local|vector|||0||
+patients_final_names|stem|2a1c929946aaf623|252b7a0043486852|71eff74a2b77a8cd|-1835357481||t20535.4466297952s|s579847b|579847|rds|local|vector|||0.05||
+patients_complete|stem|1b7fdcd22f189158|2d02626f7d1a538f|98fc9f6e1223d7c8|-417595223||t20535.4466321026s|s581991b|581991|rds|local|vector|||0.03||
+adult_proc_summary|stem|10d2edb822a033f2|bda796ad37c6737f|4c754593a2bbbc67|-1468604908||t20535.4466369463s|s8105b|8105|rds|local|vector|||0.24||
+patient_locations_map|stem|6a666e199bf44674|21e5533f2f4a26af|5b99126cc9912cb2|-43827691||t20535.4466416764s|s1938556b|1938556|rds|local|vector|||0.04||
 process_patients|function|984fcd9fed482c04
 get_patients|function|94cb4da1aaea43bb
 convert_data_to_parquet|function|b0bcc2e45f42769e
 validate_patients|function|3abd8488fbeb8c8f
-process_patient_geo_and_id|function|569ada8816531daa
+process_patient_geo_and_id|function|6934570028817543
 plot_top_conditions|function|c792cda78ab8045e
 create_patient_map|function|2918bac149e1682a
 process_patient_names|function|1a18fa482c65f2f2
@@ -22,9 +28,3 @@ analyze_adult_procedures|function|898b2e0b6496464e
 get_processed_procedures|function|807c7e4284c2256e
 add_derived_variables|function|361c8cdfdb62e361
 get_snapshot_date|function|397e80a4af5a7f1d
-patients_processed|stem|fc5a7b8548cd0c7d|dc751fcfa943ba3b|1e4f633e78bf0001|-911928841||t20532.9891471045s|s580003b|580003|rds|local|vector|||0.01||
-patients_with_age|stem|aca901cb4a9aec75|a8814a6f1d4d9046|cd930eaad8161801|1294097869||t20532.9891491035s|s592753b|592753|rds|local|vector|||0||
-patients_final_names|stem|54697a6976a14402|252b7a0043486852|0974d28ea407fab0|-1835357481||t20532.989151583s|s579843b|579843|rds|local|vector|||0.03||
-patients_complete|stem|7e04c1a183427e53|2d02626f7d1a538f|fb329900c38d5c88|-417595223||t20532.9891537803s|s581988b|581988|rds|local|vector|||0.03||
-adult_proc_summary|stem|a209b11af24d397d|bda796ad37c6737f|384faf7e6cb5d1c6|-1468604908||t20532.9891578087s|s8103b|8103|rds|local|vector|||0.21||
-patient_locations_map|stem|a83705ae985bdf9d|21e5533f2f4a26af|411f4a638873ae7f|-43827691||t20532.9891626789s|s1938544b|1938544|rds|local|vector|||0.05||
